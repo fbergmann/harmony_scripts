@@ -6,6 +6,7 @@ import libcombine
 import logging
 import os
 import shutil
+import sys
 
 import sedml_tools
 
@@ -53,6 +54,16 @@ def check_archive(archive_file, tempdir='../out'):
     shutil.rmtree(temp_dir)
 
 
+def main():
+    # archive_file = '../examples/BIOMD0000000791-20210325-094855.omex'
+    # check_archive(archive_file)
+
+    if len(sys.argv) < 3:
+        print('usage check_omex <omex file> <tempdir>s')
+        sys.exit(1)
+
+    check_archive(sys.argv[1], sys.argv[2])
+
+
 if __name__ == "__main__":
-    archive_file = '../examples/BIOMD0000000791-20210325-094855.omex'
-    check_archive(archive_file)
+    main()
