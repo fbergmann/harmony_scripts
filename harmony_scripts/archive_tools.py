@@ -8,7 +8,10 @@ import os
 import shutil
 import sys
 
-from . import sedml_tools
+try:
+    import sedml_tools
+except ImportError:
+    from . import sedml_tools
 
 
 def check_archive(archive_file, tempdir='../out'):
@@ -44,7 +47,7 @@ def check_archive(archive_file, tempdir='../out'):
     for root, dirs, files in os.walk(temp_dir):
         for file in files:
             if file not in expected_locations and file not in ['manifest.xml', 'metadata.rdf']:
-                logging.error(f'Encountered unexpected file in archive {file}')
+                logging.error(f'Encountered unexpected file in archive {file} in archive {name}')
 
     # check SED-ML files:
     for sedml_file in sedml_files:
@@ -59,7 +62,7 @@ def check_omex():
     # check_archive(archive_file)
 
     if len(sys.argv) < 3:
-        print('usage: check_omex <omex file> <tempdir>s')
+        print('usage: check_omex <omex file> <tempdir>')
         sys.exit(1)
 
     check_archive(sys.argv[1], sys.argv[2])

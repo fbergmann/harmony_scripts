@@ -3,11 +3,17 @@
 """
 
 #import basico
-from . import sedml_tools
+
 import COPASI
 import os
 import logging
 import sys
+
+try:
+    import sedml_tools
+except ImportError:
+    from . import sedml_tools
+
 
 dm = COPASI.CRootContainer.addDatamodel()
 assert (isinstance(dm, COPASI.CDataModel))

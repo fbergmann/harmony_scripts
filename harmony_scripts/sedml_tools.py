@@ -26,6 +26,7 @@ def check_files_exist(sedml_file_name):
     doc = libsedml.readSedMLFromFile(sedml_file_name)
     assert (isinstance(doc, libsedml.SedDocument))
 
+    name = os.path.splitext(os.path.basename(sedml_file_name))[0]
     directory = os.path.dirname(sedml_file_name)
 
     model_ids = [model.getId() for model in doc.getListOfModels()]
@@ -41,7 +42,7 @@ def check_files_exist(sedml_file_name):
         model_file_name = os.path.join(directory, model.getSource())
 
         if not os.path.exists(model_file_name):
-            logging.error(f'missing model file {model.getSource()}')
+            logging.error(f'missing model file {model.getSource()} in sedml-file {name}')
             result = False
 
     return result
