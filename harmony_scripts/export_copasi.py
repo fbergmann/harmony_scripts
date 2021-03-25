@@ -2,8 +2,6 @@
 
 """
 
-#import basico
-
 import COPASI
 import os
 import logging
@@ -19,7 +17,17 @@ dm = COPASI.CRootContainer.addDatamodel()
 assert (isinstance(dm, COPASI.CDataModel))
 
 
-def create_sedml(cps_filename, sedml_file_name, sbml_model_name='model.xml', out_dir='../out', remove_others=True):
+def create_sedml(cps_filename, sedml_file_name, sbml_model_name='model.xml', out_dir='../out', remove_others=False):
+    """ Creates a new sedml file and sbml model in the specified folder
+
+    :param cps_filename: full path to the COPASI file
+    :param sedml_file_name: target sbml filename (basename only)
+    :param sbml_model_name: target sbml filename (basename only), optional will be 'model.xml' if not defined
+    :param out_dir: target output folder (defaults to '../out')
+    :param remove_others: should a 'model.xml' file already exist in the output folder, this file will be removed
+                          if remove_others is True, otherwise export will be stopped with error.
+    :return: tuple of sedml filename and sbml filename created
+    """
     if not dm.loadModel(cps_filename):
         raise ValueError(COPASI.CCopasiMessage.getAllMessageText())
 
@@ -52,6 +60,8 @@ def create_sedml(cps_filename, sedml_file_name, sbml_model_name='model.xml', out
 
 
 def export_sedml():
+    """ Entry point for copasi sedml export from command line
+    """
     # cps_file = '../examples/Wilson2012.cps'
     # create_sedml(cps_file, 'Wilson2012.sedml', sbml_model_name='Wilson2012.xml')
 
@@ -60,6 +70,7 @@ def export_sedml():
         sys.exit(1)
 
     create_sedml(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    sys.exit(0)
 
 
 if __name__ == "__main__":

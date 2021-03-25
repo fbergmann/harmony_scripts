@@ -7,6 +7,15 @@ import os
 
 
 def rename_model(sedml_file_name, old_name, new_name, output_file=None):
+    """ renames a model source in the SED-ML file
+
+    :param sedml_file_name: full path to the sedml file
+    :param old_name: old model source to be renamed
+    :param new_name: new model source
+    :param output_file: optional target filename where the new sed-ml file will be saved (otherwise the original
+          one will be overwritten)
+    :return: None
+    """
     doc = libsedml.readSedMLFromFile(sedml_file_name)
     assert (isinstance(doc, libsedml.SedDocument))
     for i in range(doc.getNumModels()):
@@ -23,6 +32,11 @@ def rename_model(sedml_file_name, old_name, new_name, output_file=None):
 
 
 def check_files_exist(sedml_file_name):
+    """ Utility function that checks whether all the model sources do exist
+
+    :param sedml_file_name: full path to a sedml file
+    :return: True, if all model sources exist, False otherwise.
+    """
     doc = libsedml.readSedMLFromFile(sedml_file_name)
     assert (isinstance(doc, libsedml.SedDocument))
 

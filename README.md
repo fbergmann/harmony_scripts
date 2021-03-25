@@ -24,6 +24,24 @@ this gives you the following two command line scripts:
  * `check_omex`: just checks the given omex file, to see if all files are in there and if it contains SED-ML files whether those contain all models 
  * `export_copasi_sedml`: given a copasi file, this lets you export it as SED-ML, allowing to specify the SBML filename and where to place it. 
 
+To test whether the installation works you can run: 
+
+	(venv) frank@BQFRANK:/tmp#  python -m harmony_scripts
+ 	HARMONY utility scripts
+
+        Uses:
+            COPASI 4.30.240
+            libSBML 5.19.0
+            libSEDML 2.0.16
+            libCOMBINE 0.2.7
+
+        Provides the command line functions:
+
+            check_omex <omex file> <tempdir>
+            export_copasi_sedml <cps file file> <sedml_name> <sbml_name> <output_dir>
+		 
+
+
 ### Examples `check_omex`
 
 Called without arg: 

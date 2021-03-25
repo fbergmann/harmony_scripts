@@ -15,6 +15,12 @@ except ImportError:
 
 
 def check_archive(archive_file, tempdir='../out'):
+    """ Checks the given COMBINE archive
+
+    :param archive_file: combine archive
+    :param tempdir: temp folder where to extract files too
+    :return: boolean indicating whether issues were found (False), or all is good (True)
+    """
     archive = libcombine.CombineArchive()
     archive.initializeFromArchive(archive_file)
 
@@ -43,18 +49,21 @@ def check_archive(archive_file, tempdir='../out'):
     # extract archive to see if all files are in the manifest
     archive.extractTo(temp_dir)
 
+    result = True
     # check for files not included in manifest
     for root, dirs, files in os.walk(temp_dir):
         for file in files:
             if file not in expected_locations and file not in ['manifest.xml', 'metadata.rdf']:
                 logging.error(f'Encountered unexpected file in archive {file} in archive {name}')
+                result = False
 
     # check SED-ML files:
     for sedml_file in sedml_files:
-        sedml_tools.check_files_exist(os.path.join(temp_dir, sedml_file))
+        result = result and sedml_tools.check_files_exist(os.path.join(temp_dir, sedml_file))
 
     # cleanup
     shutil.rmtree(temp_dir)
+    return result
 
 
 def check_omex():
@@ -65,7 +74,7 @@ def check_omex():
         print('usage: check_omex <omex file> <tempdir>')
         sys.exit(1)
 
-    check_archive(sys.argv[1], sys.argv[2])
+    sys.exit(0 if check_archive(sys.argv[1], sys.argv[2]) else 1)
 
 
 if __name__ == "__main__":
