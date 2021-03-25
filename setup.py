@@ -4,6 +4,8 @@ ENTRY_POINTS = {
     'console_scripts': [
         'check_omex=harmony_scripts.archive_tools:check_omex',
         'export_copasi_sedml=harmony_scripts.export_copasi:export_sedml',
+        'sbml_inline_function_definitions=harmony_scripts.sbml_tools:inline_function_definitions',
+        'check_sbml=harmony_scripts.sbml_tools:validate_sbml_main',
     ]
 }
 
