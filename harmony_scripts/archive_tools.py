@@ -59,7 +59,7 @@ def check_omex():
     # check_archive(archive_file)
 
     if len(sys.argv) < 3:
-        print('usage check_omex <omex file> <tempdir>s')
+        print('usage: check_omex <omex file> <tempdir>s')
         sys.exit(1)
 
     check_archive(sys.argv[1], sys.argv[2])

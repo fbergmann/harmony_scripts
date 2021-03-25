@@ -50,7 +50,7 @@ def export_sedml():
     # create_sedml(cps_file, 'Wilson2012.sedml', sbml_model_name='Wilson2012.xml')
 
     if len(sys.argv) < 4:
-        print('usage export_copasi_sedml <cps file file> <sedml_name> <sbml_name> <output_dir>')
+        print('usage: export_copasi_sedml <cps file file> <sedml_name> <sbml_name> <output_dir>')
         sys.exit(1)
 
     create_sedml(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
