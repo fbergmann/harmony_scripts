@@ -3,7 +3,7 @@
 """
 
 #import basico
-import sedml_tools
+from . import sedml_tools
 import COPASI
 import os
 import logging

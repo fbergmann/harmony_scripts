@@ -8,7 +8,7 @@ import os
 import shutil
 import sys
 
-import sedml_tools
+from . import sedml_tools
 
 
 def check_archive(archive_file, tempdir='../out'):
