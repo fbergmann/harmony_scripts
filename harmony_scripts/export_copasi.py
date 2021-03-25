@@ -2,7 +2,7 @@
 
 """
 
-import basico
+#import basico
 import sedml_tools
 import COPASI
 import os
@@ -45,7 +45,7 @@ def create_sedml(cps_filename, sedml_file_name, sbml_model_name='model.xml', out
     return output_sedml_file, output_sbml_file
 
 
-def main():
+def export_sedml():
     # cps_file = '../examples/Wilson2012.cps'
     # create_sedml(cps_file, 'Wilson2012.sedml', sbml_model_name='Wilson2012.xml')
 
@@ -57,4 +57,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    export_sedml()

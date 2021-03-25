@@ -2,8 +2,8 @@ from setuptools import setup
 
 ENTRY_POINTS = {
     'console_scripts': [
-        'check_omex=archive_tools:main',
-        'export_copasi_sedml=export_copasi:main',
+        'check_omex=harmony_scripts.archive_tools:check_omex',
+        'export_copasi_sedml=harmony_scripts.export_copasi:export_sedml',
     ]
 }
 

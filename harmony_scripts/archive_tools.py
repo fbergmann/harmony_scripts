@@ -54,7 +54,7 @@ def check_archive(archive_file, tempdir='../out'):
     shutil.rmtree(temp_dir)
 
 
-def main():
+def check_omex():
     # archive_file = '../examples/BIOMD0000000791-20210325-094855.omex'
     # check_archive(archive_file)
 
@@ -66,4 +66,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    check_omex()
