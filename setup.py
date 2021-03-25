@@ -10,7 +10,7 @@ ENTRY_POINTS = {
 setup(
     name='harmony_scripts',
     version='0.0.1',
-    packages=[''],
+    packages=['harmony_scripts'],
     url='https://github.com/fbergmann/harmony_scripts',
     license='Artistic-2.0',
     author='Frank T. Bergmann',
