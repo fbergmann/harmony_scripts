@@ -12,6 +12,11 @@ try:
 except ImportError:
     from . import sedml_tools
 
+try:
+    import sbml_tools
+except ImportError:
+    from . import sbml_tools
+
 
 dm = COPASI.CRootContainer.addDatamodel()
 assert (isinstance(dm, COPASI.CDataModel))
@@ -30,8 +35,6 @@ def create_sedml(cps_filename, sedml_file_name, sbml_model_name='model.xml', out
     """
     if not dm.loadModel(cps_filename):
         raise ValueError(COPASI.CCopasiMessage.getAllMessageText())
-
-    print(dm.getModel().getObjectName())
 
     default_output_sbml_file = os.path.join(out_dir, 'model.xml')
     output_sbml_file = default_output_sbml_file
@@ -55,6 +58,9 @@ def create_sedml(cps_filename, sedml_file_name, sbml_model_name='model.xml', out
 
         # rename file in sedml
         sedml_tools.rename_model(output_sedml_file, 'model.xml', sbml_model_name)
+
+    # validate the SBML file
+    sbml_tools.validate_sbml_file(output_sbml_file)
 
     return output_sedml_file, output_sbml_file
 
