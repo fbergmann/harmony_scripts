@@ -1141,7 +1141,7 @@ vaccine dose
         <ListOfAssignments>
           <Assignment target="CN=Root,Model=Wilson2012 - tumor vaccine efficacy,Vector=Compartments[tme],Vector=Metabolites[V]" targetKey="Metabolite_4">
             <Expression>
-              +&lt;CN=Root,Model=Wilson2012 - tumor vaccine efficacy,Vector=Values[g0],Reference=Value>
+              &lt;CN=Root,Model=Wilson2012 - tumor vaccine efficacy,Vector=Values[g0],Reference=Value>
             </Expression>
           </Assignment>
         </ListOfAssignments>
