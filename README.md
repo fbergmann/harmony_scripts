@@ -51,8 +51,29 @@ Called without arg:
 
 Called with arg: 
 
-	(venv) frank@BQFRANK:/tmp# check_omex ./harmony_scripts/examples/	BIOMD0000000791-20210325-094855.omex /tmp
+	(venv) frank@BQFRANK:/tmp# check_omex ./harmony_scripts/examples/BIOMD0000000791-20210325-094855.omex /tmp
 	ERROR:root:missing model file model.xml
+
+Testing a biomodel: 
+
+	(venv) frank@BQFRANK:/tmp#  curl -L http://www.ebi.ac.uk/biomodels/model/download/BIOMD0000000001 -o BIOMD0000000001.omex
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                   	 Dload  Upload   Total   Spent    Left  Speed
+  	  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+	100  277k    0  277k    0     0   131k      0 --:--:--  0:00:02 --:--:--  160k
+	(venv) frank@BQFRANK:/tmp#  check_omex ./BIOMD0000000001.omex /tmp
+	(venv) frank@BQFRANK:/tmp# 
+
+And another test:
+
+	(venv) frank@BQFRANK:/tmp#  curl -L http://www.ebi.ac.uk/biomodels/model/download/BIOMD0000000791 -o BIOMD0000000791.omex
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 	 Dload  Upload   Total   Spent    Left  Speed
+	  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+	100 15980    0 15980    0     0  10760      0 --:--:--  0:00:01 --:--:--  200k
+	(venv) frank@BQFRANK:/tmp# check_omex ./BIOMD0000000791.omex /tmp
+	ERROR:root:missing model file model.xml in sedml-file Wilson2012	
+	(venv) frank@BQFRANK:/tmp# 
 
 
 ### Examples `export_copasi_sedml`
