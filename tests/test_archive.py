@@ -6,14 +6,17 @@ import libsedml
 import libsbml
 import os
 
+try:
+    import test_utils
+except ModuleNotFoundError:
+    from . import test_utils
+
 
 class TestExample(unittest.TestCase):
 
     def setUp(self):
         self.archive = libcombine.CombineArchive()
-        file_name = './examples/BIOMD0000000791-20210325-094855.omex'
-        if not os.path.exists(file_name):
-            file_name = '.' + file_name
+        file_name = test_utils.get_example('BIOMD0000000791-20210325-094855.omex')
 
         self.assertTrue(os.path.exists(file_name))
         self.archive.initializeFromArchive(file_name)
