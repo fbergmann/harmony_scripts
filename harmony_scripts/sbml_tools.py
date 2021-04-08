@@ -1,6 +1,13 @@
 import libsbml
 import logging
 import sys
+import xml
+
+
+def convert_function_definitions(doc):
+    props = libsbml.ConversionProperties()
+    props.addOption("expandFunctionDefinitions", True)
+    return doc.convert(props)
 
 
 def inline_function_definitions(sbml_file, output_file=None):
@@ -16,9 +23,7 @@ def inline_function_definitions(sbml_file, output_file=None):
         logging.error("[Error] " + doc.getErrorLog().toString())
         return False
 
-    props = libsbml.ConversionProperties()
-    props.addOption("expandFunctionDefinitions", True)
-    if doc.convert(props) != libsbml.LIBSBML_OPERATION_SUCCESS:
+    if convert_function_definitions(doc) != libsbml.LIBSBML_OPERATION_SUCCESS:
         logging.error("[Error] Conversion failed...")
         logging.error("[Error] " + doc.getErrorLog().toString())
         return False
@@ -40,6 +45,11 @@ def validate_sbml_file(sbml_file):
         logging.error("[Error] " + doc.getErrorLog().toString())
         return False
 
+    return True
+
+
+def xpath_expressions_exist(doc, xpaths):
+    # type: (libsbml.SBMLDocument, [str]) -> bool
     return True
 
 
