@@ -10,8 +10,10 @@ import sys
 
 try:
     import sedml_tools
+    import sbml_tools
 except ImportError:
     from . import sedml_tools
+    from . import sbml_tools
 
 
 def check_archive(archive_file, tempdir='../out'):
@@ -34,6 +36,7 @@ def check_archive(archive_file, tempdir='../out'):
     manifest = archive.getManifest()
     expected_locations = []
     sedml_files = []
+    sbml_files = []
     assert (isinstance(manifest, libcombine.CaOmexManifest))
 
     for i in range(manifest.getNumContents()):
@@ -45,6 +48,8 @@ def check_archive(archive_file, tempdir='../out'):
         expected_locations.append(entry.getLocation())
         if 'identifiers.org/combine.specifications/sed-ml' in entry.getFormat():
             sedml_files.append(entry.getLocation())
+        if 'identifiers.org/combine.specifications/sbml' in entry.getFormat():
+            sbml_files.append(entry.getLocation())
 
     # extract archive to see if all files are in the manifest
     archive.extractTo(temp_dir)
@@ -54,12 +59,20 @@ def check_archive(archive_file, tempdir='../out'):
     for root, dirs, files in os.walk(temp_dir):
         for file in files:
             if file not in expected_locations and file not in ['manifest.xml', 'metadata.rdf']:
-                logging.error(f'Encountered unexpected file in archive {file} in archive {name}')
+                logging.error(f'Encountered unexpected file in archive "{file}" in archive "{name}"')
                 result = False
 
     # check SED-ML files:
     for sedml_file in sedml_files:
-        result = result and sedml_tools.check_files_exist(os.path.join(temp_dir, sedml_file))
+        valid, xpath_expressions, model_file = sedml_tools.check_files_exist(os.path.join(temp_dir, sedml_file))
+        result = result and valid
+
+        if len(xpath_expressions) > 0 and os.path.exists(model_file):
+            sbml_tools.validate_sbml_file(model_file, xpath_expressions)
+
+        # check that SBML files are valid
+    for sbml_file in sbml_files:
+        sbml_tools.validate_sbml_file(os.path.join(temp_dir, sbml_file))
 
     # cleanup
     shutil.rmtree(temp_dir)

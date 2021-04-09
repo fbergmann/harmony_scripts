@@ -40,11 +40,18 @@ def check_files_exist(sedml_file_name):
     doc = libsedml.readSedMLFromFile(sedml_file_name)
     assert (isinstance(doc, libsedml.SedDocument))
 
+    if doc.getNumErrors(libsedml.LIBSEDML_SEV_ERROR) > 0:
+        logging.error('invalid SED-ML document: ' + doc.getErrorLog().toString())
+
+    elif doc.getNumErrors(libsedml.LIBSEDML_SEV_WARNING) > 0:
+        logging.warning('warnings in SED-ML document: ' + doc.getErrorLog().toString())
+
     name = os.path.splitext(os.path.basename(sedml_file_name))[0]
     directory = os.path.dirname(sedml_file_name)
 
     model_ids = [model.getId() for model in doc.getListOfModels()]
     result = True
+    model_file_name = ''
     for i in range(doc.getNumModels()):
         model = doc.getModel(i)
         assert (isinstance(model, libsedml.SedModel))
@@ -56,31 +63,17 @@ def check_files_exist(sedml_file_name):
         model_file_name = os.path.join(directory, model.getSource())
 
         if not os.path.exists(model_file_name):
-            logging.error(f'missing model file {model.getSource()} in sedml-file {name}')
+            logging.error(f'missing model file "{model.getSource()}" in sedml-file "{name}"')
             result = False
 
         if ':' in model_file_name and not model_file_name.startswith('urn:'):
             logging.warning(f'source {model.getSource()} contains colon, and is likely not to resolve on all platforms')
 
-    return result
+    check_for_duplicated_ids(doc, True)
 
+    xpath_expressions = get_xpath_expressions_from(doc)
 
-def _check_for_duplicated_ids_in_list(sed_list, all_ids):
-    # type: (libsedml.SedListOf) -> bool
-
-    result = True
-
-    for element in sed_list:
-        id = element.id
-
-        if id not in all_ids:
-            all_ids[id] = 0
-        else:
-            result = False
-
-        all_ids[id] = all_ids[id] + 1
-
-    return result
+    return result, xpath_expressions, model_file_name
 
 
 class _IdFilter(libsedml.SedElementFilter):

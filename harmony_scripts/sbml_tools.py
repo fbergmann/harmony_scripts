@@ -33,16 +33,18 @@ def inline_function_definitions(sbml_file, output_file=None):
     libsbml.writeSBMLToFile(doc, output_file)
 
 
-def validate_sbml_file(sbml_file):
+def validate_sbml_file(sbml_file, xpath_expressions=None):
     doc = libsbml.readSBMLFromFile(sbml_file)
 
     if doc.getNumErrors(libsbml.LIBSBML_SEV_ERROR) > 0:
-        logging.error("[Error] " + doc.getErrorLog().toString())
+        logging.error(f"file {sbml_file} had errors: " + doc.getErrorLog().toString())
         return False
 
     elif doc.getNumErrors(libsbml.LIBSBML_SEV_WARNING) > 0:
-        logging.error("[Error] " + doc.getErrorLog().toString())
-        return False
+        logging.warning(f"file {sbml_file} had warnings:  " + doc.getErrorLog().toString())
+
+    if xpath_expressions is not None:
+        return xpath_expressions_exist(doc, xpath_expressions)
 
     return True
 
