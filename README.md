@@ -32,8 +32,8 @@ To test whether the installation works you can run:
         Uses:
             COPASI 4.30.240
             libSBML 5.19.0
-            libSEDML 2.0.16
-            libCOMBINE 0.2.7
+            libSEDML 2.0.18
+            libCOMBINE 0.2.10
 
         Provides the command line functions:
 
@@ -43,6 +43,12 @@ To test whether the installation works you can run:
 
 
 ### Examples `check_omex`
+The `check_omex` command will check the given omex archive, for the following things: 
+
+* sbml models referenced from SED-ML files, do exist in the archive
+* the SED-ML / SBML files are valid
+* ids are not duplicated in the SED-ML file
+* xpath expressions from the SED-ML file do resolve in the SBML file
 
 Called without arg: 
 
@@ -92,6 +98,32 @@ Called with arg:
 
 	(venv) frank@BQFRANK:/tmp# cat Wilson2012.sedml  | grep "<model"
     <model id="model" language="urn:sedml:language:sbml" source="Wilson2012.xml"/>
+
+### Examples `check_sbml`
+This script validates SBML files
+
+Called without arg: 
+
+	(venv) frank@BQFRANK:/tmp# check_sbml
+	usage: check_sbml <sbml file>
+
+Called with arg: 
+
+	(venv) frank@BQFRANK:/tmp# check_sbml ./harmony_scripts/examples/Wilson2012.xml
+
+### Examples `inline_function_definitions`
+This script modifies the SBML file given, to inline all function definitions. 
+If only one argument is given, the source file will be overwritten, otherwise 
+the output file will be created.  
+
+Called without arg: 
+
+	(venv) frank@BQFRANK:/tmp# inline_function_definitions
+	usage: inline_function_definitions <sbml file> [output file]
+
+Called with arg: 
+
+	(venv) frank@BQFRANK:/tmp# inline_function_definitions ./harmony_scripts/examples/Wilson2012.xml ./out/Wilson2012.xml
 
 ## License 
 Just as COPASI, the packages available on this page are provided under the 

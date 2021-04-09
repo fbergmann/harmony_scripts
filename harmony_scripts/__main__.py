@@ -17,6 +17,8 @@ if __name__ == '__main__':
             
             check_omex <omex file> <tempdir>
             export_copasi_sedml <cps file file> <sedml_name> <sbml_name> <output_dir>
+            check_sbml <sbml_file>
+            sbml_inline_function_definitions <sbml_file> [output_sbml_file]
 
     """)
     sys.exit(0)
