@@ -151,7 +151,7 @@ def get_xpath_expressions_from(doc):
 
     doc.getListOfAllElements(xpath_filter)
 
-    return xpath_filter
+    return xpath_filter.xpath_expressions
 
 
 if __name__ == "__main__":
