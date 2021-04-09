@@ -2,4 +2,5 @@ python-copasi
 python-libsbml
 python-libsedml
 python-libcombine
+lxml
 git+git://github.com/copasi/basico.git#egg=basico

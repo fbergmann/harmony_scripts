@@ -59,6 +59,9 @@ def check_files_exist(sedml_file_name):
             logging.error(f'missing model file {model.getSource()} in sedml-file {name}')
             result = False
 
+        if ':' in model_file_name and not model_file_name.startswith('urn:'):
+            logging.warning(f'source {model.getSource()} contains colon, and is likely not to resolve on all platforms')
+
     return result
 
 
@@ -127,7 +130,7 @@ class _XpathFilter(libsedml.SedElementFilter):
 
     def __init__(self):
         libsedml.SedElementFilter.__init__(self)
-        self.xpaths = []
+        self.xpath_expressions = []
 
     def filter(self, element):
         assert(isinstance(element, libsedml.SedBase))
@@ -136,19 +139,19 @@ class _XpathFilter(libsedml.SedElementFilter):
         if isinstance(element, libsedml.SedVariable) or isinstance(element, libsedml.SedChange):
             if element.isSetTarget():
                 target = element.getTarget()
-                if target not in self.xpaths:
-                    self.xpaths.append(target)
+                if target not in self.xpath_expressions:
+                    self.xpath_expressions.append(target)
         return False
 
 
 def get_xpath_expressions_from(doc):
     # type: (libsedml.SedDocument) -> [str]
 
-    filter = _XpathFilter()
+    xpath_filter = _XpathFilter()
 
-    elements = doc.getListOfAllElements(filter)
+    doc.getListOfAllElements(xpath_filter)
 
-    return filter.xpaths
+    return xpath_filter
 
 
 if __name__ == "__main__":

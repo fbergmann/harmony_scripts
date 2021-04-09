@@ -1,7 +1,7 @@
 import libsbml
 import logging
 import sys
-import xml
+from lxml import etree
 
 
 def convert_function_definitions(doc):
@@ -20,12 +20,11 @@ def inline_function_definitions(sbml_file, output_file=None):
 
     doc = libsbml.readSBMLFromFile(sbml_file)
     if doc.getNumErrors(libsbml.LIBSBML_SEV_ERROR) > 0:
-        logging.error("[Error] " + doc.getErrorLog().toString())
+        logging.error("invalid SBML document " + doc.getErrorLog().toString())
         return False
 
     if convert_function_definitions(doc) != libsbml.LIBSBML_OPERATION_SUCCESS:
-        logging.error("[Error] Conversion failed...")
-        logging.error("[Error] " + doc.getErrorLog().toString())
+        logging.error("Conversion failed with: " + doc.getErrorLog().toString())
         return False
 
     if output_file is None:
@@ -48,9 +47,26 @@ def validate_sbml_file(sbml_file):
     return True
 
 
-def xpath_expressions_exist(doc, xpaths):
+def xpath_expressions_exist(doc, xpath_expressions):
     # type: (libsbml.SBMLDocument, [str]) -> bool
-    return True
+    sbml = libsbml.writeSBMLToString(doc)
+    tree = etree.fromstring(sbml.encode('utf-8'))
+    result = True
+    for xpath in xpath_expressions:
+        if ':' not in xpath:
+            logging.warning(f"no prefix used in xpath expression: {xpath} this likely cannot be resolved")
+        try:
+            elements = tree.xpath(xpath, namespaces={'sbml': doc.getSBMLNamespaces().getURI()})
+            num_elements = len(elements)
+            if num_elements == 0:
+                logging.error(f"no match for xpath expression: {xpath}")
+                result = False
+            if num_elements > 1:
+                logging.warning(f"more than one match for xpath expression, this is not supported by many tools: {xpath}")
+        except TypeError:
+            logging.error(f"invalid xpath expression: {xpath}")
+            result = False
+    return result
 
 
 def validate_sbml_main():

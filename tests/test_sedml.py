@@ -40,7 +40,6 @@ class TestSEDML(unittest.TestCase):
         # get all xpath expressions
         xpaths = harmony_scripts.get_xpath_expressions_from(self.doc)
         self.assertTrue(len(xpaths) > 0)
-        self.assertTrue(harmony_scripts.xpath_expressions_exist(self.doc, xpaths))
 
 
 if __name__ == "__main__":
