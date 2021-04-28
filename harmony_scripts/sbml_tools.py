@@ -49,8 +49,45 @@ def validate_sbml_file(sbml_file, xpath_expressions=None):
     return True
 
 
+class _CopasiAnnotationFilter(libsbml.ElementFilter):
+
+    def __init__(self):
+        libsbml.ElementFilter.__init__(self)
+
+    def filter(self, element):
+        assert(isinstance(element, libsbml.SBase))
+        if element.isSetMetaId():
+            node = element.getAnnotation()
+            for i in range(node.getNumChildren()):
+                child = node.getChild(i)
+                if child.getURI() == 'http://www.copasi.org/static/sbml':
+                    return True
+        return False
+
+
+def remove_copasi_annotations(doc):
+    # type: (libsbml.SBMLDocument) -> int
+    """Removes the COPASI RDF annotations from the given SBML document"""
+    num_removed = 0
+    model = doc.getModel()
+    assert(isinstance(model, libsbml.Model))
+    annotated_list = model.getListOfAllElements(_CopasiAnnotationFilter())
+
+    for element in annotated_list:
+        node = element.getAnnotation()
+        assert(isinstance(node, libsbml.XMLNode))
+        num_children = node.getNumChildren()
+        for i in reversed(range(num_children)):
+            child = node.getChild(i)
+            if child.getURI() == 'http://www.copasi.org/static/sbml':
+                node.removeChild(i)
+                num_removed += 1
+
+    return num_removed
+
+
 def xpath_expressions_exist(doc, xpath_expressions):
-    # type: (libsbml.SBMLDocument, [str]) -> bool
+    # type: (libsbml.SBMLDocument, List[str]) -> bool
     sbml = libsbml.writeSBMLToString(doc)
     tree = etree.fromstring(sbml.encode('utf-8'))
     result = True

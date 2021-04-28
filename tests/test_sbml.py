@@ -37,6 +37,9 @@ class TestSBML(unittest.TestCase):
 
         self.assertTrue(harmony_scripts.xpath_expressions_exist(self.doc, xpaths))
 
+    def test_remove_copasi_annotations(self):
+        self.assertTrue(harmony_scripts.sbml_tools.remove_copasi_annotations(self.doc) == 37)
+
 
 if __name__ == "__main__":
     unittest.main()
